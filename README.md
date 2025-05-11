@@ -1,11 +1,32 @@
-# zeus-ai
+<br/>
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/amosehiguese/zeus-ai)](https://goreportcard.com/report/github.com/amosehiguese/zeus-ai)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Release](https://img.shields.io/github/release/amosehiguese/zeus-ai.svg)](https://github.com/amosehiguese/zeus-ai/releases)
+<div align="center">
+  Like this project ? Leave us a star ⭐
+</div>
+
+<br/>
+
+<div align="center">
+  <a href="https://github.com/amosehiguese/zeus-ai" target="_blank">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/zeus-ai-logo.png">
+    <img src="https://raw.githubusercontent.com/amosehiguese/zeus-ai/main/assets/zeus-ai-logo.png" alt="zeus-ai logo">
+  </picture>
+  </a>
+</div>
+
+<br/>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/amosehiguese/zeus-ai/main/assets/zeus-ai-logo.png" alt="zeus-ai logo" width="200">
+  <a href="https://goreportcard.com/report/github.com/amosehiguese/zeus-ai">
+    <img src="https://goreportcard.com/badge/github.com/amosehiguese/zeus-ai" alt="Report Card">
+  </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT">
+  </a>
+  <a href="https://github.com/amosehiguese/zeus-ai/releases">
+    <img src="https://img.shields.io/github/release/amosehiguese/zeus-ai.svg" alt="releases">
+  </a>
 </p>
 
 zeus-ai is a Git-aware CLI tool that helps developers generate smart commit messages using LLM APIs. It analyzes your Git diff, sends it to an LLM (such as DeepSeek, Claude, or any local model via Ollama), receives multiple commit message suggestions, and allows you to select and edit the message before committing.
