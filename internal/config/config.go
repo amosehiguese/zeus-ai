@@ -9,28 +9,28 @@ import (
 )
 
 type Config struct {
-	Provider    string
-	APIKey      string
-	Model       string
+	Provider     string
+	APIKey       string
+	Model        string
 	DefaultStyle string
 }
 
 func Load() (*Config, error) {
 	config := &Config{
-		Provider:    "ollama", // Default provider
-		Model:       "deepseek-coder", // Default model
+		Provider:     "ollama",         // Default provider
+		Model:        "deepseek-coder", // Default model
 		DefaultStyle: "conventional",
 	}
 
 	viper.SetConfigName(".zeusrc")
 	viper.SetConfigType("yaml")
-	
+
 	// Look for config in home directory
 	home, err := os.UserHomeDir()
 	if err == nil {
 		viper.AddConfigPath(home)
 	}
-	
+
 	// Look for config in current directory and all parent directories
 	currentDir, err := os.Getwd()
 	if err == nil {

@@ -20,7 +20,7 @@ func GetDiff(staged bool) (string, error) {
 	if staged {
 		args = append(args, "--cached")
 	}
-	
+
 	cmd := exec.Command("git", args...)
 	var out bytes.Buffer
 	cmd.Stdout = &out
@@ -28,7 +28,7 @@ func GetDiff(staged bool) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("git diff failed: %w", err)
 	}
-	
+
 	return out.String(), nil
 }
 
@@ -41,7 +41,7 @@ func HasUnstagedChanges() (bool, error) {
 	if err != nil {
 		return false, fmt.Errorf("git diff failed: %w", err)
 	}
-	
+
 	return out.String() != "", nil
 }
 
@@ -51,7 +51,7 @@ func GetDiffStats(staged bool) (string, error) {
 	if staged {
 		args = append(args, "--cached")
 	}
-	
+
 	cmd := exec.Command("git", args...)
 	var out bytes.Buffer
 	cmd.Stdout = &out
@@ -59,7 +59,7 @@ func GetDiffStats(staged bool) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("git diff --stat failed: %w", err)
 	}
-	
+
 	return out.String(), nil
 }
 
@@ -70,7 +70,7 @@ func StageAllChanges() error {
 	if err != nil {
 		return fmt.Errorf("git add failed: %w", err)
 	}
-	
+
 	return nil
 }
 
@@ -80,15 +80,15 @@ func Commit(message string, sign bool) error {
 	if sign {
 		args = append(args, "-S")
 	}
-	
+
 	cmd := exec.Command("git", args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	
+
 	err := cmd.Run()
 	if err != nil {
 		return fmt.Errorf("git commit failed: %w", err)
 	}
-	
+
 	return nil
 }

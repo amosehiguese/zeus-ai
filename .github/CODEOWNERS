@@ -1,0 +1,5 @@
+# CODEOWNERS file to determine who is responsible for code
+# Used by GitHub to automatically request reviews from the relevant team members
+
+# Default owners for everything in the repo
+*       @amosehiguese

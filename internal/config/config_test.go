@@ -170,7 +170,7 @@ default_style: conventional
 
 func TestLoadDefaultValues(t *testing.T) {
 	viper.Reset()
-	
+
 	// Create a temporary directory with no config file
 	tmpDir, err := os.MkdirTemp("", "zeus-config-test-*")
 	require.NoError(t, err, "Failed to create temp directory")

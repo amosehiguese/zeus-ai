@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"testing"
-	
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -133,7 +133,6 @@ func TestHasUnstagedChanges(t *testing.T) {
 	hasChanges, err := HasUnstagedChanges()
 	require.NoError(t, err, "Failed to check for unstaged changes")
 	require.False(t, hasChanges, "Expected no unstaged changes initially")
-
 
 	// Create and stage a file to be tracked
 	createAndAddFile(t, tmpDir, "test.txt", "Hello, Zeus!")
