@@ -1,6 +1,6 @@
 module github.com/amosehiguese/zeus-ai
 
-go 1.23
+go 1.22
 
 require github.com/spf13/viper v1.20.1
 
