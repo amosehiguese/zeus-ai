@@ -23,26 +23,21 @@ func NewInitCommand() *cobra.Command {
 		RunE:  initCommandFunc,
 	}
 
-	cmd.Flags().String("provider", "ollama", "LLM provider (ollama, openrouter)")
-	cmd.Flags().String("api-key", "", "API key for the provider")
-	cmd.Flags().String("model", "deepseek-coder", "Model to use")
-	cmd.Flags().String("style", "conventional", "Default commit style")
+	cmd.Flags().StringVar(&providerFlag, "provider", "ollama", "LLM provider (ollama, openrouter)")
+	cmd.Flags().StringVar(&apiKeyFlag, "api-key", "", "API key for the provider")
+	cmd.Flags().StringVar(&modelFlag, "model", "deepseek-coder", "Model to use")
+	cmd.Flags().StringVar(&styleFlag, "style", "conventional", "Default commit style")
 
 	return cmd
 }
 
 func initCommandFunc(cmd *cobra.Command, args []string) error {
-	provider, _ := cmd.Flags().GetString("provider")
-	apiKey, _ := cmd.Flags().GetString("api-key")
-	model, _ := cmd.Flags().GetString("model")
-	style, _ := cmd.Flags().GetString("style")
-
 	config := fmt.Sprintf(`# zeus-ai configuration
 provider: %s
 api_key: %s
 model: %s
 default_style: %s
-`, provider, apiKey, model, style)
+`, providerFlag, apiKeyFlag, modelFlag, styleFlag)
 
 	err := os.WriteFile(".zeusrc", []byte(config), 0644)
 	if err != nil {
