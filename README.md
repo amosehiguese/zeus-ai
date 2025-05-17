@@ -51,10 +51,10 @@ git clone https://github.com/amosehiguese/zeus-ai.git
 cd zeus-ai
 
 # Build the binary
-go build -o zeus-ai ./cmd/zeus-ai
+go build -o zeusctl ./zeusctl or make build
 
 # Move to path (optional)
-sudo mv zeus-ai /usr/local/bin/
+sudo mv zeusctl /usr/local/bin/
 ```
 
 ### Manual Download
@@ -86,7 +86,7 @@ Example `.zeusrc` file:
 # LLM Provider configuration
 provider: openrouter        
 api_key: your-api-key-here
-model: deepseek/deepseek-coder
+model: mistralai/mistral-small-3.1-24b-instruct:free
 
 # Default commit style
 default_style: conventional  # Options: conventional, simple
@@ -105,7 +105,7 @@ All settings can be configured with environment variables, which take precedence
 # Required settings
 export ZEUS_PROVIDER=openrouter
 export ZEUS_API_KEY=your-api-key-here
-export ZEUS_MODEL=deepseek/deepseek-coder
+export ZEUS_MODEL=mistralai/mistral-small-3.1-24b-instruct:free
 
 # Optional settings
 export ZEUS_DEFAULT_STYLE=conventional
@@ -119,7 +119,7 @@ export ZEUS_AUTO_STAGE=false
 #### Ollama (Local Models)
 ```yaml
 provider: ollama
-model: deepseek-coder  # or any model you have pulled in Ollama
+model: mistral  # or any model you have pulled in Ollama
 # No API key needed for local Ollama
 ```
 
@@ -127,7 +127,7 @@ model: deepseek-coder  # or any model you have pulled in Ollama
 ```yaml
 provider: openrouter
 api_key: your-openrouter-api-key
-model: deepseek/deepseek-coder  # or any other model supported by OpenRouter
+model: mistralai/mistral-small-3.1-24b-instruct:free  # or any other model supported by OpenRouter
 ```
 
 ## 💻 Usage

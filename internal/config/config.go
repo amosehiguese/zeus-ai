@@ -18,7 +18,7 @@ type Config struct {
 func Load() (*Config, error) {
 	config := &Config{
 		Provider:     "ollama",         // Default provider
-		Model:        "deepseek-coder", // Default model
+		Model:        "mistral", // Default model
 		DefaultStyle: "conventional",
 	}
 

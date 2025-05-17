@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/amosehiguese/zeus-ai/pkg/terminal"
+	"github.com/amosehiguese/zeus-ai/internal/terminal"
 	"github.com/spf13/cobra"
 )
 

@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/amosehiguese/zeus-ai/pkg/cobrautil"
-	"github.com/amosehiguese/zeus-ai/pkg/terminal"
+	"github.com/amosehiguese/zeus-ai/internal/terminal"
 	"github.com/amosehiguese/zeus-ai/zeusctl/ctlv1/command"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"

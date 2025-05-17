@@ -56,6 +56,8 @@ STRICT REQUIREMENTS:
 3. Title must follow Conventional Commits format when requested
 4. Omit "body" field when not requested
 5. Escape all special JSON characters
+6. Do NOT include the git diff in your response
+7. Do NOT include any commentary or markdown
 
 Git Diff:
 `)
@@ -87,6 +89,18 @@ Git Diff:
 
 
 func parseJSONResponse(content string, includeBody bool) ([]string, error) {
+	jsonStart := strings.Index(content, "```json")
+	if jsonStart >= 0 {
+		content = content[jsonStart+7:]
+	}
+
+	jsonEnd := strings.Index(content, "```")
+	if jsonEnd >= 0 {
+		content = content[:jsonEnd]
+	}
+
+	content = strings.TrimSpace(content)
+
 	var response LLMResponse
 	if err := json.Unmarshal([]byte(content), &response); err != nil {
 		return nil, fmt.Errorf("invalid JSON response: %w", err)

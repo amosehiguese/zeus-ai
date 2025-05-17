@@ -5,9 +5,9 @@ import (
 	"log"
 
 	"github.com/amosehiguese/zeus-ai/internal/config"
-	"github.com/amosehiguese/zeus-ai/pkg/git"
-	"github.com/amosehiguese/zeus-ai/pkg/llm"
-	"github.com/amosehiguese/zeus-ai/pkg/terminal"
+	"github.com/amosehiguese/zeus-ai/internal/git"
+	"github.com/amosehiguese/zeus-ai/internal/llm"
+	"github.com/amosehiguese/zeus-ai/internal/terminal"
 	"github.com/spf13/cobra"
 )
 

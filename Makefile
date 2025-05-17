@@ -3,7 +3,7 @@
 .PHONY: all build clean test lint install uninstall release
 
 # Build variables
-BINARY_NAME=zeus-ai
+BINARY_NAME=zeusctl
 VERSION=$(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
 BUILD_TIME=$(shell date +%FT%T%z)
 LDFLAGS=-ldflags "-X main.version=${VERSION} -X main.buildTime=${BUILD_TIME}"
@@ -20,7 +20,7 @@ all: lint test build
 # Build the binary
 build: $(SOURCES)
 	@echo "Building ${BINARY_NAME}..."
-	@go build ${LDFLAGS} -o bin/${BINARY_NAME} ./cmd/zeus-ai
+	@go build ${LDFLAGS} -o bin/${BINARY_NAME} ./zeusctl
 
 # Run tests
 test:
@@ -83,7 +83,7 @@ cross-build:
 		$(eval OS := $(word 1,$(subst /, ,$(PLATFORM))))\
 		$(eval ARCH := $(word 2,$(subst /, ,$(PLATFORM))))\
 		echo "Building for $(OS)/$(ARCH)..." && \
-		GOOS=$(OS) GOARCH=$(ARCH) go build ${LDFLAGS} -o dist/${BINARY_NAME}-$(OS)-$(ARCH) ./cmd/zeus-ai; \
+		GOOS=$(OS) GOARCH=$(ARCH) go build ${LDFLAGS} -o dist/${BINARY_NAME}-$(OS)-$(ARCH) ./zeusctl; \
 		if [ "$(OS)" = "windows" ]; then \
 			mv dist/${BINARY_NAME}-$(OS)-$(ARCH) dist/${BINARY_NAME}-$(OS)-$(ARCH).exe; \
 		fi; \
