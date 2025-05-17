@@ -1,10 +1,8 @@
-package main
+package command
 
 import (
 	"fmt"
 	"log"
-	"os"
-	"time"
 
 	"github.com/amosehiguese/zeus-ai/internal/config"
 	"github.com/amosehiguese/zeus-ai/pkg/git"
@@ -13,7 +11,34 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func handleSuggestCommand(cmd *cobra.Command, args []string) error {
+var (
+	bodyFlag      bool
+	editFlag      bool
+	signFlag      bool
+	dryRunFlag    bool
+	autoStageFlag bool
+)
+
+func NewSuggestCommand() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "suggest",
+		Short: "Suggest commit messages based on git diff",
+		Long:  `Suggest commit messages based on staged changes (or unstaged if nothing is staged)`,
+		RunE:  suggestCommandFunc,
+	}
+
+	cmd.Flags().BoolVar(&bodyFlag, "body", false, "Include detailed body text in suggestions")
+	cmd.Flags().BoolVar(&editFlag, "edit", false, "Open the selected message in default editor")
+	cmd.Flags().BoolVar(&signFlag, "sign", false, "Sign the commit message")
+	cmd.Flags().BoolVar(&dryRunFlag, "dry-run", false, "Display message suggestions but don't run commit")
+	cmd.Flags().BoolVar(&autoStageFlag, "auto-stage", false, "Automatically stage all changes")
+	cmd.Flags().StringVar(&styleFlag, "style", "conventional", "Specify commit style (e.g., conventional, simple)")
+
+	return cmd
+}
+
+
+func suggestCommandFunc(cmd *cobra.Command, args []string) error {
 	// Load config
 	cfg, err := config.Load()
 	if err != nil {
@@ -40,8 +65,7 @@ func handleSuggestCommand(cmd *cobra.Command, args []string) error {
 
 	// If no staged changes, check if there are unstaged changes
 	if diff == "" {
-		fmt.Println("No staged changes found.")
-
+		terminal.ShowWarning("No staged changes found.")
 		unstaged, err := git.HasUnstagedChanges()
 		if err != nil {
 			return fmt.Errorf("failed to check for unstaged changes: %w", err)
@@ -73,43 +97,18 @@ func handleSuggestCommand(cmd *cobra.Command, args []string) error {
 	}
 
 	// Show diff stats
-	stats, err := git.GetDiffStats(true)
-	if err == nil && stats != "" {
-		fmt.Println("\n📊 Git diff stats:")
-		fmt.Println("-----------------------------------------")
-		fmt.Println(stats)
-		fmt.Println("-----------------------------------------")
+	if stats, err := git.GetDiffStats(true); err == nil {
+		terminal.ShowDiffStats(stats)
 	}
 
-	// Generate suggestions with spinner
-	fmt.Print("🧠 Generating commit message suggestions... ")
-
-	// Create a spinner in a goroutine
-	stopSpinner := make(chan bool)
-	go func() {
-		spinChars := []string{"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"}
-		i := 0
-		for {
-			select {
-			case <-stopSpinner:
-				fmt.Print("\r")
-				return
-			default:
-				fmt.Printf("\r🧠 Generating commit message suggestions... %s", spinChars[i])
-				i = (i + 1) % len(spinChars)
-				time.Sleep(100 * time.Millisecond)
-			}
-		}
-	}()
-
+	stopSpinner := terminal.ShowSpinner("Generating comit message suggestions...")
 	suggestions, err := provider.GenerateSuggestions(diff, bodyFlag, styleFlag)
+	stopSpinner()
 	if err != nil {
 		log.Printf("Got an error while generating suggestions: %v", err)
 		return err
 	}
-	// Stop the spinner
-	stopSpinner <- true
-	fmt.Println("\r✅ Generated suggestions!                  ")
+	terminal.ShowSuccess("Generated 3 suggesions")
 
 	// Display suggestions
 	selectedIdx, err := terminal.DisplayAndSelectSuggestion(suggestions)
@@ -136,41 +135,17 @@ func handleSuggestCommand(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	// Perform the commit
-	if !dryRunFlag {
-		err = git.Commit(commitMsg, signFlag)
-		if err != nil {
-			return fmt.Errorf("failed to commit: %w", err)
-		}
-		fmt.Println("✅ Commit successful!")
-	} else {
-		fmt.Println("📝 Dry run - message that would be committed:")
-		fmt.Println("-----")
+	if dryRunFlag {
+		terminal.ShowSuccess("Dry run - would commit:")
 		fmt.Println(commitMsg)
-		fmt.Println("-----")
+		return nil
 	}
 
-	return nil
-}
-
-func handleInitCommand(cmd *cobra.Command, args []string) error {
-	provider, _ := cmd.Flags().GetString("provider")
-	apiKey, _ := cmd.Flags().GetString("api-key")
-	model, _ := cmd.Flags().GetString("model")
-	style, _ := cmd.Flags().GetString("style")
-
-	config := fmt.Sprintf(`# zeus-ai configuration
-provider: %s
-api_key: %s
-model: %s
-default_style: %s
-`, provider, apiKey, model, style)
-
-	err := os.WriteFile(".zeusrc", []byte(config), 0644)
-	if err != nil {
-		return fmt.Errorf("failed to write config file: %w", err)
+	// Perform the commit
+	if err := git.Commit(commitMsg, signFlag); err != nil {
+		return fmt.Errorf("commit failed: %w", err)
 	}
 
-	fmt.Println("✅ Configuration file .zeusrc created successfully!")
+	terminal.ShowSuccess("Commit created successfully")
 	return nil
 }

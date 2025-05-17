@@ -5,70 +5,141 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
+	"time"
 )
 
-// Confirm asks the user for confirmation
+func DisplayAndSelectSuggestion(suggestions []string) (int, error) {
+	if len(suggestions) != 3 {
+		return -1, fmt.Errorf("expected 3 suggestions, got %d", len(suggestions))
+	}
+
+	printHeader("COMMIT MESSAGE SUGGESTIONS")
+
+	for i, suggestion := range suggestions {
+		parts := strings.SplitN(suggestion, "\n\n", 2)
+		TitleColor.Printf("  %d. %s\n", i+1, parts[0])
+
+		if len(parts) > 1 {
+			BodyColor.Printf("     %s\n", indentBody(parts[1]))
+		}
+	}
+
+	printOptions()
+	return getSelection(len(suggestions))
+}
+
+func ShowDiff(diff string) {
+	lines := strings.Split(diff, "\n")
+	for _, line := range lines {
+		switch {
+		case strings.HasPrefix(line, "+"):
+			DiffAddColor.Println(line)
+		case strings.HasPrefix(line, "-"):
+			DiffRemoveColor.Println(line)
+		default:
+			fmt.Println(line)
+		}
+	}
+}
+
+func ShowDiffStats(stats string) {
+	DividerColor.Println("\nGIT DIFF STATS:")
+	BodyColor.Println(stats)
+	DividerColor.Println(strings.Repeat("─", 40))
+}
+
+func ShowSpinner(message string) func() {
+	stop := make(chan bool)
+	frames := []string{"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"}
+
+	go func() {
+		i := 0
+		for {
+			select {
+			case <-stop:
+				return
+			default:
+				SpinnerColor.Printf("\r%s %s", frames[i], message)
+				i = (i + 1) % len(frames)
+				time.Sleep(100 * time.Millisecond)
+			}
+		}
+	}()
+
+	return func() {
+		stop <- true
+		fmt.Printf("\r%s\r", strings.Repeat(" ", 60))
+	}
+}
+
 func Confirm(prompt string) (bool, error) {
-	fmt.Printf("%s (y/n): ", prompt)
+	PromptColor.Printf("%s (y/N): ", prompt)
 
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	if err != nil {
-		return false, fmt.Errorf("failed to read input: %w", err)
+		return false, fmt.Errorf("input error: %w", err)
 	}
 
 	input = strings.ToLower(strings.TrimSpace(input))
 	return input == "y" || input == "yes", nil
 }
 
-// DisplayAndSelectSuggestion displays the suggestions and allows the user to select one
-func DisplayAndSelectSuggestion(suggestions []string) (int, error) {
-	fmt.Println("\n🔮 Commit message suggestions:")
-	fmt.Println("-----------------------------------------")
+func ShowSuccess(message string) {
+	SuccessColor.Println("✓", message)
+}
 
-	for i, suggestion := range suggestions {
-		// For multi-line suggestions, only show the first line in the list
-		firstLine := strings.SplitN(suggestion, "\n", 2)[0]
-		fmt.Printf("%d. %s\n", i+1, firstLine)
-	}
+func ShowWarning(message string) {
+	WarningColor.Println("!", message)
+}
 
-	fmt.Println("-----------------------------------------")
-	fmt.Println("e. Edit manually")
-	fmt.Println("q. Quit without committing")
-	fmt.Print("\nSelect an option (1-5, e, q): ")
+func ShowError(message string) {
+	ErrorColor.Println("✖", message)
+}
+
+// Helper functions
+func printHeader(title string) {
+	DividerColor.Println("\n┌───────────────────────────────────────────────────────┐")
+	TitleColor.Printf("  %s\n", title)
+	DividerColor.Println("├───────────────────────────────────────────────────────┤")
+}
+
+func printOptions() {
+	DividerColor.Println("├───────────────────────────────────────────────────────┤")
+	OptionColor.Println("  e - Edit manually")
+	OptionColor.Println("  q - Quit without committing")
+	DividerColor.Println("└───────────────────────────────────────────────────────┘")
+}
+
+func getSelection(max int) (int, error) {
+	PromptColor.Print("\n  Select an option (1-3/e/q): ")
 
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	if err != nil {
-		return -1, fmt.Errorf("failed to read input: %w", err)
+		return -1, fmt.Errorf("input error: %w", err)
 	}
 
-	input = strings.TrimSpace(input)
-
-	if input == "e" {
-		return -1, nil
-	}
-
-	if input == "q" {
-		fmt.Println("Exiting without committing.")
+	input = strings.TrimSpace(strings.ToLower(input))
+	switch input {
+	case "e":
+		return -1, nil // Edit mode
+	case "q":
 		os.Exit(0)
 	}
 
-	// Try to parse the input as a number
-	var selectedIdx int
-	_, err = fmt.Sscanf(input, "%d", &selectedIdx)
-	if err != nil || selectedIdx < 1 || selectedIdx > len(suggestions) {
-		return -1, fmt.Errorf("invalid selection")
+	idx, err := strconv.Atoi(input)
+	if err != nil || idx < 1 || idx > max {
+		ShowError("Invalid selection. Please choose 1-3, e, or q")
+		return getSelection(max)
 	}
+	return idx - 1, nil
+}
 
-	// Show full suggestion if it has multiple lines
-	fmt.Println("\nSelected commit message:")
-	fmt.Println("-----------------------------------------")
-	fmt.Println(suggestions[selectedIdx-1])
-	fmt.Println("-----------------------------------------")
-
-	return selectedIdx - 1, nil
+func indentBody(body string) string {
+	return strings.ReplaceAll(body, "\n", "\n     ")
 }
 
 // EditMessage opens the default editor to edit the message

@@ -26,7 +26,11 @@ func NewOllamaProvider(model string) *OllamaProvider {
 type OllamaRequest struct {
 	Model  string `json:"model"`
 	Prompt string `json:"prompt"`
+	Format string `json:"format"`
 	Stream bool   `json:"stream"`
+	Options struct {
+		Temperature float64 `json:"temperature"`
+	} `json:"options"`
 }
 
 type OllamaResponse struct {
@@ -47,7 +51,11 @@ func (p *OllamaProvider) GenerateSuggestions(diff string, includeBody bool, styl
 	reqBody := OllamaRequest{
 		Model:  p.Model,
 		Prompt: prompt,
+		Format: "json",
 		Stream: false,
+		Options: struct{Temperature float64 "json:\"temperature\""}{
+			Temperature: 0.7,
+		},
 	}
 
 	reqBytes, err := json.Marshal(reqBody)
@@ -88,6 +96,5 @@ func (p *OllamaProvider) GenerateSuggestions(diff string, includeBody bool, styl
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
-	// Parse the response into individual suggestions
-	return parseSuggestions(respObj.Response), nil
+	return parseJSONResponse(respObj.Response, includeBody)
 }

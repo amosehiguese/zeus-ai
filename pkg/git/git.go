@@ -78,7 +78,7 @@ func StageAllChanges() error {
 func Commit(message string, sign bool) error {
 	args := []string{"commit", "-m", message}
 	if sign {
-		args = append(args, "-S")
+		args = append(args, "-s")
 	}
 
 	cmd := exec.Command("git", args...)

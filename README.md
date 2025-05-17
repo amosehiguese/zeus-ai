@@ -33,12 +33,11 @@ zeus-ai is a Git-aware CLI tool that helps developers generate smart commit mess
 
 ## 🚀 Features
 
-- **Multiple LLM Provider Support**: DeepSeek, Claude, Ollama, OpenRouter
+- **Multiple LLM Provider Support**: Ollama, OpenRouter
 - **Git Integration**: Works with staged/unstaged changes, supports signed commits
 - **Smart Suggestions**: Generate multiple commit message options based on your changes
 - **Flexible Configuration**: Config file, environment variables, command flags
 - **Terminal UI**: Simple interface for selecting and editing commit messages
-- **Cross-Platform**: Works on Linux, macOS, and Windows
 
 ## 📋 Installation
 
@@ -56,13 +55,6 @@ go build -o zeus-ai ./cmd/zeus-ai
 
 # Move to path (optional)
 sudo mv zeus-ai /usr/local/bin/
-```
-
-### Using Homebrew (macOS/Linux)
-
-```bash
-brew tap amosehiguese/zeus-ai
-brew install zeus-ai
 ```
 
 ### Manual Download
@@ -92,9 +84,9 @@ Example `.zeusrc` file:
 
 ```yaml
 # LLM Provider configuration
-provider: claude        # Options: deepseek, claude, ollama, openrouter
+provider: openrouter        
 api_key: your-api-key-here
-model: claude-3-sonnet-20240229
+model: deepseek/deepseek-coder
 
 # Default commit style
 default_style: conventional  # Options: conventional, simple
@@ -111,9 +103,9 @@ All settings can be configured with environment variables, which take precedence
 
 ```bash
 # Required settings
-export ZEUS_PROVIDER=claude
+export ZEUS_PROVIDER=openrouter
 export ZEUS_API_KEY=your-api-key-here
-export ZEUS_MODEL=claude-3-sonnet-20240229
+export ZEUS_MODEL=deepseek/deepseek-coder
 
 # Optional settings
 export ZEUS_DEFAULT_STYLE=conventional
@@ -129,20 +121,6 @@ export ZEUS_AUTO_STAGE=false
 provider: ollama
 model: deepseek-coder  # or any model you have pulled in Ollama
 # No API key needed for local Ollama
-```
-
-#### Claude (Anthropic)
-```yaml
-provider: claude
-api_key: your-anthropic-api-key
-model: claude-3-sonnet-20240229  # Options: claude-3-opus-20240229, claude-3-sonnet-20240229, claude-3-haiku-20240307
-```
-
-#### DeepSeek
-```yaml
-provider: deepseek
-api_key: your-deepseek-api-key
-model: deepseek-coder  # or other DeepSeek models
 ```
 
 #### OpenRouter
@@ -275,10 +253,10 @@ Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgements
 
 - [Cobra](https://github.com/spf13/cobra) for CLI functionality
 - [Viper](https://github.com/spf13/viper) for configuration management
-- [DeepSeek](https://deepseek.com/), [Anthropic](https://www.anthropic.com/), and [Ollama](https://ollama.ai/) for LLM APIs
+- [OpenRouter](https://openrouter.ai/), and [Ollama](https://ollama.ai/) for LLM APIs

@@ -28,6 +28,10 @@ func NewOpenRouterProvider(apiKey string, model string) *OpenRouterProvider {
 type OpenRouterRequest struct {
 	Model    string    `json:"model"`
 	Messages []Message `json:"messages"`
+	ResponseFormat struct {
+		Type string `json:"type"`
+	} `json:"response_format"`
+	Stream bool `json:"stream"`
 }
 
 type OpenRouterResponse struct {
@@ -51,6 +55,10 @@ func (p *OpenRouterProvider) GenerateSuggestions(diff string, includeBody bool, 
 				Content: prompt,
 			},
 		},
+		ResponseFormat: struct{Type string "json:\"type\""}{
+			Type: "json_object",
+		},
+		Stream: false,
 	}
 
 	reqBytes, err := json.Marshal(reqBody)
@@ -66,7 +74,7 @@ func (p *OpenRouterProvider) GenerateSuggestions(diff string, includeBody bool, 
 
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+p.APIKey)
-	req.Header.Set("HTTP-Referer", "https://github.com/yourusername/zeus-ai")
+	req.Header.Set("HTTP-Referer", "https://github.com/amosehiguese/zeus-ai")
 
 	client := &http.Client{
 		Timeout: 30 * time.Second,
@@ -99,5 +107,5 @@ func (p *OpenRouterProvider) GenerateSuggestions(diff string, includeBody bool, 
 
 	// Parse the response into individual suggestions
 	content := respObj.Choices[0].Message.Content
-	return parseSuggestions(content), nil
+	return parseJSONResponse(content, includeBody)
 }
