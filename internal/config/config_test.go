@@ -197,6 +197,6 @@ func TestLoadDefaultValues(t *testing.T) {
 
 	// Verify default values
 	require.Equal(t, "ollama", cfg.Provider, "Wrong default Provider")
-	require.Equal(t, "deepseek-coder", cfg.Model, "Wrong default Model")
+	require.Equal(t, "mistral", cfg.Model, "Wrong default Model")
 	require.Equal(t, "conventional", cfg.DefaultStyle, "Wrong default Style")
 }
