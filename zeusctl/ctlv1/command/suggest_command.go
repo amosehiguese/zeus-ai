@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/spf13/cobra"
+
 	"github.com/amosehiguese/zeus-ai/internal/config"
 	"github.com/amosehiguese/zeus-ai/internal/git"
 	"github.com/amosehiguese/zeus-ai/internal/llm"
 	"github.com/amosehiguese/zeus-ai/internal/terminal"
-	"github.com/spf13/cobra"
 )
 
 var (
@@ -37,7 +38,6 @@ func NewSuggestCommand() *cobra.Command {
 	return cmd
 }
 
-
 func suggestCommandFunc(cmd *cobra.Command, args []string) error {
 	// Load config
 	cfg, err := config.Load()
@@ -52,7 +52,7 @@ func suggestCommandFunc(cmd *cobra.Command, args []string) error {
 
 	// Auto-stage if flag is set
 	if autoStageFlag {
-		if err := git.StageAllChanges(); err != nil {
+		if err = git.StageAllChanges(); err != nil {
 			return fmt.Errorf("failed to stage changes: %w", err)
 		}
 	}
@@ -66,13 +66,15 @@ func suggestCommandFunc(cmd *cobra.Command, args []string) error {
 	// If no staged changes, check if there are unstaged changes
 	if diff == "" {
 		terminal.ShowWarning("No staged changes found.")
-		unstaged, err := git.HasUnstagedChanges()
+		var unstaged bool
+		unstaged, err = git.HasUnstagedChanges()
 		if err != nil {
 			return fmt.Errorf("failed to check for unstaged changes: %w", err)
 		}
 
 		if unstaged {
-			shouldUseUnstaged, err := terminal.Confirm("Would you like to use unstaged changes instead?")
+			var shouldUseUnstaged bool
+			shouldUseUnstaged, err = terminal.Confirm("Would you like to use unstaged changes instead?")
 			if err != nil {
 				return fmt.Errorf("failed to get confirmation: %w", err)
 			}
@@ -97,7 +99,7 @@ func suggestCommandFunc(cmd *cobra.Command, args []string) error {
 	}
 
 	// Show diff stats
-	if stats, err := git.GetDiffStats(true); err == nil {
+	if stats, statErr := git.GetDiffStats(true); statErr == nil {
 		terminal.ShowDiffStats(stats)
 	}
 

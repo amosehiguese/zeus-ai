@@ -26,8 +26,8 @@ func NewOpenRouterProvider(apiKey string, model string) *OpenRouterProvider {
 }
 
 type OpenRouterRequest struct {
-	Model    string    `json:"model"`
-	Messages []Message `json:"messages"`
+	Model          string    `json:"model"`
+	Messages       []Message `json:"messages"`
 	ResponseFormat struct {
 		Type string `json:"type"`
 	} `json:"response_format"`
@@ -55,7 +55,9 @@ func (p *OpenRouterProvider) GenerateSuggestions(diff string, includeBody bool, 
 				Content: prompt,
 			},
 		},
-		ResponseFormat: struct{Type string "json:\"type\""}{
+		ResponseFormat: struct {
+			Type string "json:\"type\""
+		}{
 			Type: "json_object",
 		},
 		Stream: false,
@@ -67,7 +69,7 @@ func (p *OpenRouterProvider) GenerateSuggestions(diff string, includeBody bool, 
 	}
 
 	// Make the API request
-	req, err := http.NewRequest("POST", "https://openrouter.ai/api/v1/chat/completions", bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequest(http.MethodPost, "https://openrouter.ai/api/v1/chat/completions", bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}

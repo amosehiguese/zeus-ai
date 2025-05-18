@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/amosehiguese/zeus-ai/internal/terminal"
 	"github.com/spf13/cobra"
+
+	"github.com/amosehiguese/zeus-ai/internal/terminal"
 )
 
 var (
 	providerFlag string
-	apiKeyFlag string
-	modelFlag string
-	styleFlag string
+	apiKeyFlag   string
+	modelFlag    string
+	styleFlag    string
 )
 
 func NewInitCommand() *cobra.Command {
@@ -39,7 +40,7 @@ model: %s
 default_style: %s
 `, providerFlag, apiKeyFlag, modelFlag, styleFlag)
 
-	err := os.WriteFile(".zeusrc", []byte(config), 0644)
+	err := os.WriteFile(".zeusrc", []byte(config), 0o600)
 	if err != nil {
 		return fmt.Errorf("failed to write config file: %w", err)
 	}

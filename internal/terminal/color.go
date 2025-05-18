@@ -2,7 +2,6 @@ package terminal
 
 import "github.com/fatih/color"
 
-
 var (
 	// Primary colors
 	TitleColor   = color.New(color.FgHiCyan, color.Bold)

@@ -41,12 +41,23 @@ lint:
 		echo "golangci-lint not found, please install it"; \
 		exit 1; \
 	fi
+	@echo "✓ Linting Done."
+
+# Fix linting errors using golangci-lint
+fix:
+	@echo "Auto-fixing code with golangci-lint..."
+	@if command -v golangci-lint > /dev/null; then \
+		golangci-lint run --fix ./...; \
+	else \
+		echo "golangci-lint not found, please install it with 'make deps'"; \
+		exit 1; \
+	fi
+	@echo "✓ Fix Done."
 
 # Install dependencies
 deps:
 	@echo "Installing dependencies..."
 	@go mod download
-	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 # Install the binary
 install: build

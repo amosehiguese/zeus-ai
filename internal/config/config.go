@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -17,7 +18,7 @@ type Config struct {
 
 func Load() (*Config, error) {
 	config := &Config{
-		Provider:     "ollama",         // Default provider
+		Provider:     "ollama",  // Default provider
 		Model:        "mistral", // Default model
 		DefaultStyle: "conventional",
 	}
@@ -51,7 +52,8 @@ func Load() (*Config, error) {
 	// Read the config file
 	if err := viper.ReadInConfig(); err != nil {
 		// It's okay if there is no config file
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+		var notFoundErr viper.ConfigFileNotFoundError
+		if !errors.As(err, &notFoundErr) {
 			return nil, fmt.Errorf("failed to read config file: %w", err)
 		}
 	}

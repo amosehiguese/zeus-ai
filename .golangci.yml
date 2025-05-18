@@ -2,7 +2,7 @@ linters-settings:
   goimports:
     local-prefixes: github.com/amosehiguese/zeus-ai
   govet:
-    check-shadowing: true
+    shadow: true
   revive:
       confidence: 0.8
       rules:
@@ -34,7 +34,6 @@ linters:
     - staticcheck
     - stylecheck
     - testifylint
-    - thehelper
     - unconvert
     - unparam
     - unused
@@ -43,8 +42,6 @@ linters:
 run:
   timeout: 5m
   max-same-issues: 0
-  skip-dirs:
-    - vendor/
 
 issues:
   max-issues-per-linter: 0

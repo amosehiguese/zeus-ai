@@ -1,9 +1,10 @@
 package command
 
 import (
+	"github.com/spf13/cobra"
+
 	"github.com/amosehiguese/zeus-ai/api/version"
 	"github.com/amosehiguese/zeus-ai/internal/terminal"
-	"github.com/spf13/cobra"
 )
 
 func NewVersionCommand() *cobra.Command {

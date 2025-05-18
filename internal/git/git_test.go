@@ -46,7 +46,7 @@ func setupGitRepo(t *testing.T) string {
 // createAndAddFile creates a file with content and stages it
 func createAndAddFile(t *testing.T, repoDir, filename, content string) {
 	filePath := filepath.Join(repoDir, filename)
-	err := os.WriteFile(filePath, []byte(content), 0644)
+	err := os.WriteFile(filePath, []byte(content), 0o644)
 	require.NoError(t, err, "Failed to write file")
 
 	cmd := exec.Command("git", "add", filename)
@@ -106,7 +106,7 @@ func TestGetDiff(t *testing.T) {
 	require.Contains(t, diff, "Hello, Zeus!", "Expected diff to contain file content")
 
 	// Modify existing file
-	err = os.WriteFile(filepath.Join(tmpDir, "test.txt"), []byte("Hello, Zeus!\nAnother content"), 0644)
+	err = os.WriteFile(filepath.Join(tmpDir, "test.txt"), []byte("Hello, Zeus!\nAnother content"), 0o644)
 	require.NoError(t, err, "Failed to write file")
 
 	// Test unstaged diff
@@ -138,7 +138,7 @@ func TestHasUnstagedChanges(t *testing.T) {
 	createAndAddFile(t, tmpDir, "test.txt", "Hello, Zeus!")
 
 	// Modify file to be unstaged
-	err = os.WriteFile(filepath.Join(tmpDir, "test.txt"), []byte("Hello, Zeus\nUnstaged content"), 0644)
+	err = os.WriteFile(filepath.Join(tmpDir, "test.txt"), []byte("Hello, Zeus\nUnstaged content"), 0o644)
 	require.NoError(t, err, "Failed to write file")
 
 	// Now there should be unstaged changes
@@ -162,7 +162,7 @@ func TestStageAllChanges(t *testing.T) {
 	require.NoError(t, err, "Failed to change directory")
 
 	// Create an unstaged file
-	err = os.WriteFile(filepath.Join(tmpDir, "unstaged.txt"), []byte("To be staged"), 0644)
+	err = os.WriteFile(filepath.Join(tmpDir, "unstaged.txt"), []byte("To be staged"), 0o644)
 	require.NoError(t, err, "Failed to write file")
 
 	// Stage all changes

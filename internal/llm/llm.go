@@ -87,7 +87,6 @@ Git Diff:
 	return prompt.String()
 }
 
-
 func parseJSONResponse(content string, includeBody bool) ([]string, error) {
 	jsonStart := strings.Index(content, "```json")
 	if jsonStart >= 0 {

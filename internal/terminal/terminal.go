@@ -181,13 +181,13 @@ func EditMessage(initialContent string, includeBody bool) (string, error) {
 	}
 	if editor == "" {
 		// Try to find a default editor based on the OS
-		if _, err := exec.LookPath("nano"); err == nil {
+		if _, err = exec.LookPath("nano"); err == nil {
 			editor = "nano"
-		} else if _, err := exec.LookPath("vim"); err == nil {
+		} else if _, err = exec.LookPath("vim"); err == nil {
 			editor = "vim"
-		} else if _, err := exec.LookPath("vi"); err == nil {
+		} else if _, err = exec.LookPath("vi"); err == nil {
 			editor = "vi"
-		} else if _, err := exec.LookPath("notepad"); err == nil {
+		} else if _, err = exec.LookPath("notepad"); err == nil {
 			editor = "notepad"
 		} else {
 			return "", fmt.Errorf("no suitable editor found, please set EDITOR environment variable")

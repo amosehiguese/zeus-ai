@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/amosehiguese/zeus-ai/zeusctl/ctlv1"
 	"github.com/fatih/color"
+
+	"github.com/amosehiguese/zeus-ai/zeusctl/ctlv1"
 )
 
 func main() {

@@ -64,7 +64,7 @@ api_key: file-api-key
 model: file-model
 default_style: conventional
 `
-	err = os.WriteFile(".zeusrc", []byte(configContent), 0644)
+	err = os.WriteFile(".zeusrc", []byte(configContent), 0o644)
 	require.NoError(t, err, "Failed to write config file")
 
 	// Load configuration
@@ -89,7 +89,7 @@ func TestLoadWithParentConfigFile(t *testing.T) {
 	// Create parent and child directories
 	parentDir := filepath.Join(tmpDir, "parent")
 	childDir := filepath.Join(parentDir, "child")
-	err = os.MkdirAll(childDir, 0755)
+	err = os.MkdirAll(childDir, 0o755)
 	require.NoError(t, err, "Failed to create directory structure")
 
 	// Create a config file in the parent directory
@@ -99,7 +99,7 @@ api_key: parent-api-key
 model: parent-model
 default_style: simple
 `
-	err = os.WriteFile(filepath.Join(parentDir, ".zeusrc"), []byte(configContent), 0644)
+	err = os.WriteFile(filepath.Join(parentDir, ".zeusrc"), []byte(configContent), 0o644)
 	require.NoError(t, err, "Failed to write config file")
 
 	// Save current directory
@@ -146,7 +146,7 @@ api_key: file-api-key
 model: file-model
 default_style: conventional
 `
-	err = os.WriteFile(".zeusrc", []byte(configContent), 0644)
+	err = os.WriteFile(".zeusrc", []byte(configContent), 0o644)
 	require.NoError(t, err, "Failed to write config file")
 
 	// Set environment variables that should override the file

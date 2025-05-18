@@ -24,10 +24,10 @@ func NewOllamaProvider(model string) *OllamaProvider {
 }
 
 type OllamaRequest struct {
-	Model  string `json:"model"`
-	Prompt string `json:"prompt"`
-	Format string `json:"format"`
-	Stream bool   `json:"stream"`
+	Model   string `json:"model"`
+	Prompt  string `json:"prompt"`
+	Format  string `json:"format"`
+	Stream  bool   `json:"stream"`
 	Options struct {
 		Temperature float64 `json:"temperature"`
 	} `json:"options"`
@@ -53,7 +53,9 @@ func (p *OllamaProvider) GenerateSuggestions(diff string, includeBody bool, styl
 		Prompt: prompt,
 		Format: "json",
 		Stream: false,
-		Options: struct{Temperature float64 "json:\"temperature\""}{
+		Options: struct {
+			Temperature float64 "json:\"temperature\""
+		}{
 			Temperature: 0.7,
 		},
 	}
@@ -64,7 +66,7 @@ func (p *OllamaProvider) GenerateSuggestions(diff string, includeBody bool, styl
 	}
 
 	// Make the API request
-	req, err := http.NewRequest("POST", "http://localhost:11434/api/generate", bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequest(http.MethodPost, "http://localhost:11434/api/generate", bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
