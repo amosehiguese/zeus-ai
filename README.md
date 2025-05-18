@@ -31,6 +31,9 @@
 
 zeus-ai is a Git-aware CLI tool that helps developers generate smart commit messages using LLM APIs. It analyzes your Git diff, sends it to an LLM (such as DeepSeek, Claude, or any local model via Ollama), receives multiple commit message suggestions, and allows you to select and edit the message before committing.
 
+## Zeus Preview
+![Zeus Demo](assets/zeusv.gif)
+
 ## 🚀 Features
 
 - **Multiple LLM Provider Support**: Ollama, OpenRouter
