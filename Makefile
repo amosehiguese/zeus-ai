@@ -58,6 +58,7 @@ fix:
 deps:
 	@echo "Installing dependencies..."
 	@go mod download
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 # Install the binary
 install: build

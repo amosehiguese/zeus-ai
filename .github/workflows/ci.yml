@@ -34,12 +34,6 @@ jobs:
       - name: Install dependencies
         run: make deps
 
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: latest
-          args: --timeout=5m
-
       - name: Lint
         run: make lint
 
@@ -67,12 +61,6 @@ jobs:
 
       - name: Install dependencies
         run: make deps
-
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: latest
-          args: --timeout=5m
 
       - name: Run tests
         run: make test
@@ -109,12 +97,6 @@ jobs:
       - name: Install dependencies
         run: make deps
 
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: latest
-          args: --timeout=5m
-
       - name: Build
         run: make build
 
@@ -150,12 +132,6 @@ jobs:
 
       - name: Install dependencies
         run: make deps
-
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: latest
-          args: --timeout=5m
 
       - name: Build release binaries
         run: make release
