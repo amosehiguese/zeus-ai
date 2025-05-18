@@ -34,6 +34,8 @@ zeus-ai is a Git-aware CLI tool that helps developers generate smart commit mess
 ## Zeus Preview
 ![Zeus Demo](assets/zeusv.gif)
 
+[Full Demo Video](https://amosehiguese.github.io/zeus-ai)
+
 ## 🚀 Features
 
 - **Multiple LLM Provider Support**: Ollama, OpenRouter
