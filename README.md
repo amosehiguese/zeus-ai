@@ -21,8 +21,8 @@
   <a href="https://goreportcard.com/report/github.com/amosehiguese/zeus-ai">
     <img src="https://goreportcard.com/badge/github.com/amosehiguese/zeus-ai" alt="Report Card">
   </a>
-  <a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT">
+  <a href="https://opensource.org/licenses/apache-2-0">
+    <img src="https://img.shields.io/badge/license-Apache-yellow.svg" alt="Apache">
   </a>
   <a href="https://github.com/amosehiguese/zeus-ai/releases">
     <img src="https://img.shields.io/github/release/amosehiguese/zeus-ai.svg" alt="releases">
